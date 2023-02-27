@@ -34,6 +34,8 @@ public final class Constants {
      */
     public static final double ALIEN_BLAST_CHANCE = 0.5;
 
+    public static final double ALIEN_ACTION_CHANCE = 0.5;
+
     /**
      * Speed at which the players' blasts move.
      * @see org.enstabretagne.invaders.InvadersFactory

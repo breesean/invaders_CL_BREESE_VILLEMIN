@@ -14,6 +14,7 @@ public class AlienComponent extends AnimationComponent {
     private final AlienBlock block;
     private final int id;
     private final Directions facing;
+    private final int action;
 
     /**
      * @param id
@@ -23,11 +24,12 @@ public class AlienComponent extends AnimationComponent {
      * @param orientation
      *          The direction the alien is facing.
      */
-    public AlienComponent(int id, AlienBlock block, Directions orientation) {
+    public AlienComponent(int id, AlienBlock block, Directions orientation, int action) {
         super("invader.png", 2, 64, 64, Duration.seconds(1), 0, 1);
 
         this.block = block;
         this.id = id;
+        this.action= action;
 
         if (orientation != Directions.UP && orientation != Directions.DOWN) {
             throw new RuntimeException("Invalid facing direction");

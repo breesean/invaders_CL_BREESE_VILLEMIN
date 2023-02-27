@@ -17,9 +17,9 @@ import static org.enstabretagne.invaders.Constants.*;
  * @author Henri Lardy
  */
 public class AlienBlock {
-    private Hashtable<Integer, Entity> alienDict;
-    private final int numberRow;
-    private final int alienPerRow;
+    public Hashtable<Integer, Entity> alienDict;
+    public final int numberRow;
+    public final int alienPerRow;
 
     /**
      * Direction of movement. Must be Directions.UP or Directions.DOWN.
@@ -316,6 +316,10 @@ public class AlienBlock {
         }
     }
 
+    public void action()  {
+
+    }
+
     /**
      * Find aliens who can shoot. Then randomly make them shoot.
      * Only aliens in an extreme line (if facing DOWN, then only the bottom aliens can shoot).
@@ -325,22 +329,22 @@ public class AlienBlock {
      * 2 4  and if only 2 4  remain, then 1 and 4 might shoot.
      * 1 3              1 .
      */
-    public void maybeBlast() {
-        ArrayList<Entity> mightShoot = new ArrayList<>();
+    public void maybeAct() {
+        ArrayList<Entity> mightAct = new ArrayList<>();
         for (int x = 0; x < this.alienPerRow; x++) {
             // Given the way we fill the hashmap, no need to differentiate facing in this loop!
             for (int y = numberRow - 1; y >= 0; y--) {
-                // Keep the first alien that can shoot per column.
+                // Keep the first alien that can act per column.
                 if (this.alienDict.containsKey(y*this.alienPerRow + x)) {
-                    mightShoot.add(alienDict.get(y*this.alienPerRow + x));
+                    mightAct.add(alienDict.get(y*this.alienPerRow + x));
                     break;
                 }
             }
         }
 
-        for (Entity alien : mightShoot) {
-            if (FXGLMath.randomBoolean(ALIEN_BLAST_CHANCE / mightShoot.size())) {
-                alien.getComponent(BlasterComponent.class).blast();
+        for (Entity alien : mightAct) {
+            if (FXGLMath.randomBoolean(ALIEN_ACTION_CHANCE / mightAct.size())) {
+                alien.getComponent(BlasterComponent.class).blast(); //Ici on veut "execute strategie numero alien.action"
             }
         }
     }

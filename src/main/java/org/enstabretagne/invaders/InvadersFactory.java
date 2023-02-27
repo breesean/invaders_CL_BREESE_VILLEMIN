@@ -19,6 +19,7 @@ import org.enstabretagne.invaders.components.*;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getSettings;
 import static org.enstabretagne.invaders.Constants.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The entity factory of the game. Controls the way entities are spawned and binds components togethers.
@@ -86,6 +87,17 @@ public class InvadersFactory implements EntityFactory {
             throw new RuntimeException("Invalid facing direction");
         }
 
+        int action = ThreadLocalRandom.current().nextInt(0, 100 + 1);
+        if (action<20){ //20% de chance d'avoir un tir double
+            new IComportement execute;
+        }
+        if (action>=20 && action<50){ //30% de chance de tir simple
+            action=1;
+        }
+        if (action>=50){ //50% de chance d'infanterie simple
+            action=2;
+        }
+
         int validDirections = 0;
         validDirections |= 1 << Directions.LEFT.ordinal();
         validDirections |= 1 << Directions.RIGHT.ordinal();
@@ -96,7 +108,7 @@ public class InvadersFactory implements EntityFactory {
                 .type(EntityType.ALIEN)
                 .at(data.getX(), data.getY())
                 .bbox(new HitBox(new Point2D(INVADER_X, INVADER_Y), BoundingShape.box(INVADER_W, INVADER_H)))
-                .with(new AlienComponent(id, block, Directions.DOWN))
+                .with(new AlienComponent(id, block, Directions.DOWN, strategie))
                 .with(new MoveComponent(ALIEN_HORIZONTAL_SPEED, ALIEN_VERTICAL_SPEED, validDirections))
                 .with(new BlasterComponent(facing, ALIEN_BLAST_SPEED, "zap.png", "blast_sound.wav"))
                 .with(new KeepInBoundsComponent(new Rectangle2D(0, 0, APP_WIDTH, APP_HEIGHT)))

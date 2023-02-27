@@ -119,9 +119,9 @@ public class InvadersApp extends GameApplication {
         // TimerAction: timerAction.pause(); OR timerAction.resume(); OR timerAction.expire();
         getGameTimer().runAtInterval(() -> {
             alienBlockDown.move();
-            alienBlockDown.maybeBlast();
+            alienBlockDown.maybeAct();
             alienBlockUp.move();
-            alienBlockUp.maybeBlast();
+            alienBlockUp.maybeAct();
         }, Duration.seconds(0.5));
     }
 
