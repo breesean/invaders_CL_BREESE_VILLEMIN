@@ -33,12 +33,14 @@ public class NetworkingSample extends GameApplication {
     @Override
     protected void initGame() {
         var cb = new CheckBox();
+        
+
         cb.selectedProperty().addListener((o, old, isSelected) -> {
             var bundle = new Bundle("CheckBoxData");
             bundle.put("isSelected", isSelected);
 
             if (isServer)
-                server.broadcast(bundle);
+                server.broadcast(bundle); //Sends the bundle to every active connection
         });
 
         addUINode(cb, 100, 100);
@@ -50,6 +52,8 @@ public class NetworkingSample extends GameApplication {
                 if (isServer) {
                     server = getNetService().newTCPServer(2000);
                     server.startAsync();
+                    
+                    
                 } else {
                     var client = getNetService().newTCPClient("localhost", 2000);
                     client.setOnConnected(connection -> {
@@ -69,4 +73,5 @@ public class NetworkingSample extends GameApplication {
         launch(args);
     }
 }
+
 

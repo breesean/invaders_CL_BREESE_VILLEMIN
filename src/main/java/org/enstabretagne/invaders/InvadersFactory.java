@@ -9,6 +9,7 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
+import com.almasb.fxgl.multiplayer.NetworkComponent;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.texture.Texture;
@@ -37,7 +38,12 @@ public class InvadersFactory implements EntityFactory {
         Texture texture;
 
         // Couldn't find way of rotating texture, so we use a different one - not enough time to search more
+        if (!data.hasKey("facing")) {
+            throw new IllegalArgumentException("Key facing not found in SpawnData!");
+        }
+
         Directions facing = data.get("facing");
+
         if (facing == Directions.UP) {
             texture = FXGL.texture("cannon_up.png");
         } else if (facing == Directions.DOWN) {
@@ -66,6 +72,7 @@ public class InvadersFactory implements EntityFactory {
                 .with(new MoveComponent(PLAYER_SPEED, PLAYER_SPEED, validDirections))
                 .with(new BlasterComponent(facing, PLAYER_BLAST_SPEED, "tir.png", "blast_sound.wav"))
                 .with(new KeepInBoundsComponent(new Rectangle2D(0, 0, APP_WIDTH, APP_HEIGHT)))
+                .with(new NetworkComponent())
                 .collidable()
                 .build();
     }
@@ -100,6 +107,7 @@ public class InvadersFactory implements EntityFactory {
                 .with(new MoveComponent(ALIEN_HORIZONTAL_SPEED, ALIEN_VERTICAL_SPEED, validDirections))
                 .with(new BlasterComponent(facing, ALIEN_BLAST_SPEED, "zap.png", "blast_sound.wav"))
                 .with(new KeepInBoundsComponent(new Rectangle2D(0, 0, APP_WIDTH, APP_HEIGHT)))
+                .with(new NetworkComponent())
                 .collidable()
                 .build();
     }
@@ -124,6 +132,7 @@ public class InvadersFactory implements EntityFactory {
                 .with(new ProjectileComponent(new Point2D(0, direction), speed))
                 .collidable()
                 .with(new OffscreenCleanComponent())
+                .with(new NetworkComponent())
                 .build();
     }
 }
