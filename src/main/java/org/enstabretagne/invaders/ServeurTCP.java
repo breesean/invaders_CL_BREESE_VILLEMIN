@@ -11,18 +11,9 @@ import java.net.Socket;
 public class ServeurTCP {
 
     private int numeroPort;
-    public IBanque banque;
 
     ServeurTCP(int unNumeroPort) {
         numeroPort = unNumeroPort;
-    }
-
-    public IBanque getBanque() {
-        return banque;
-    }
-
-    public void setBanque(IBanque uneBanque) {
-        banque = uneBanque;
     }
 
     public void go() {
@@ -56,9 +47,6 @@ public class ServeurTCP {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Serveur de banque avec une somme de :" + banque;
-    }
+
 
 }

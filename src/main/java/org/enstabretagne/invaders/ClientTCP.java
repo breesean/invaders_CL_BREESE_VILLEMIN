@@ -18,6 +18,7 @@ public class ClientTCP {
     private PrintStream socOut; // ## link socOut
     private Socket socketServeur; // ## link socketServeur
 
+
     /**
      * Création d'un nouveau {@link ClientTCP} avec un nom de serveur et un numéro
      * de port
