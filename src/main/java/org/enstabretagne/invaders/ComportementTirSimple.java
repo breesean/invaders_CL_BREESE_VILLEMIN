@@ -8,7 +8,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 import static org.enstabretagne.invaders.Constants.SPRITE_SIZE;
 
-public abstract class ComportementTirSimple implements IComportement {
+public class ComportementTirSimple implements IComportement {
     @Override
     public void execute(BlasterComponent BL) {
         if (getGameTimer().getNow() - BL.lastShot >= BLAST_COOLDOWN) {

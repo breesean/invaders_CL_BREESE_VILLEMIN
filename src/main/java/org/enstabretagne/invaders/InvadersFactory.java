@@ -58,6 +58,7 @@ public class InvadersFactory implements EntityFactory {
         }
 
         // TODO: Come back to remove checks for bounds in movement? (is done by keepInBoundsComponent)
+
         return FXGL.entityBuilder()
                 .at(data.getX(), data.getY())
                 .type(EntityType.PLAYER)
@@ -71,6 +72,8 @@ public class InvadersFactory implements EntityFactory {
                 .build();
     }
 
+
+    IComportement comportement;
     /**
      * Enemy entity, displayed as a aliens.
      * @param data
@@ -89,13 +92,13 @@ public class InvadersFactory implements EntityFactory {
 
         int action = ThreadLocalRandom.current().nextInt(0, 100 + 1);
         if (action<20){ //20% de chance d'avoir un tir double
-            new IComportement execute;
+            comportement = new ComportementTirDouble();
         }
         if (action>=20 && action<50){ //30% de chance de tir simple
-            action=1;
+            comportement = new ComportementTirSimple();
         }
         if (action>=50){ //50% de chance d'infanterie simple
-            action=2;
+            comportement = new ComportementAvance();
         }
 
         int validDirections = 0;
@@ -108,7 +111,7 @@ public class InvadersFactory implements EntityFactory {
                 .type(EntityType.ALIEN)
                 .at(data.getX(), data.getY())
                 .bbox(new HitBox(new Point2D(INVADER_X, INVADER_Y), BoundingShape.box(INVADER_W, INVADER_H)))
-                .with(new AlienComponent(id, block, Directions.DOWN, strategie))
+                .with(new AlienComponent(id, block, Directions.DOWN,comportement))
                 .with(new MoveComponent(ALIEN_HORIZONTAL_SPEED, ALIEN_VERTICAL_SPEED, validDirections))
                 .with(new BlasterComponent(facing, ALIEN_BLAST_SPEED, "zap.png", "blast_sound.wav"))
                 .with(new KeepInBoundsComponent(new Rectangle2D(0, 0, APP_WIDTH, APP_HEIGHT)))

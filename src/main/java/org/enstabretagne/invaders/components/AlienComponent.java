@@ -1,6 +1,7 @@
 package org.enstabretagne.invaders.components;
 
 import javafx.util.Duration;
+import org.enstabretagne.invaders.IComportement;
 
 /**
  * The component that ties an alien Entity to its behaviour.
@@ -14,7 +15,8 @@ public class AlienComponent extends AnimationComponent {
     private final AlienBlock block;
     private final int id;
     private final Directions facing;
-    private final int action;
+
+    public final IComportement comportement;
 
     /**
      * @param id
@@ -24,12 +26,12 @@ public class AlienComponent extends AnimationComponent {
      * @param orientation
      *          The direction the alien is facing.
      */
-    public AlienComponent(int id, AlienBlock block, Directions orientation, int action) {
+    public AlienComponent(int id, AlienBlock block, Directions orientation,IComportement comportement) {
         super("invader.png", 2, 64, 64, Duration.seconds(1), 0, 1);
 
         this.block = block;
         this.id = id;
-        this.action= action;
+        this.comportement = comportement;
 
         if (orientation != Directions.UP && orientation != Directions.DOWN) {
             throw new RuntimeException("Invalid facing direction");

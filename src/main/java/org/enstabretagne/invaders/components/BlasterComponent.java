@@ -2,6 +2,7 @@ package org.enstabretagne.invaders.components;
 
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
+import org.enstabretagne.invaders.ComportementTirSimple;
 import org.enstabretagne.invaders.IComportement;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
@@ -33,7 +34,7 @@ public class BlasterComponent extends Component {
     /**
      * Sprite used for the generated entities. (Ability to differentiate sprite according to entity).
      */
-    public final String sprite;
+    public String sprite;
     /**
      * Direction of the entity shooting - changes the direction of the generated entities.
      */
@@ -62,13 +63,33 @@ public class BlasterComponent extends Component {
         }
         this.facing = orientation;
     }
+    public void blast() {
+        if (getGameTimer().getNow() - this.lastShot >= BLAST_COOLDOWN) {
+            SpawnData data;
+            if (this.facing == Directions.UP) {
+                // +- SPRITE_SIZE / 2 to get it above/below, +-1 to prevent hitboxes from touching
+                data = new SpawnData(this.getEntity().getX(), this.getEntity().getY() - SPRITE_SIZE / 2 - 1);
+            } else if (this.facing == Directions.DOWN) {
+                data = new SpawnData(this.getEntity().getRightX(), this.getEntity().getBottomY() + SPRITE_SIZE / 2 + 1);
+            } else {
+                throw new RuntimeException("Invalid facing direction");
+            }
+            data.put("direction", this.facing);
+            data.put("sprite", this.sprite);
+            data.put("speed", this.BLAST_SPEED);
+
+            getGameWorld().spawn("Blast", data);
+            this.lastShot = getGameTimer().getNow();
+
+            this.playSound();
+        }
+    }
 
     /**
      * Shoots a blast (generates an entity) is the cooldown is over.
      */
-    IComportement mastrategy;
-    public void blast() {
-        mastrategy.execute(this);
+    public void blastAlien(AlienComponent AC) {
+        AC.comportement.execute(this);
     }
 
     /**

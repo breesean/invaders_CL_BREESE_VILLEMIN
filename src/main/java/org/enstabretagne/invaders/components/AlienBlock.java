@@ -344,7 +344,7 @@ public class AlienBlock {
 
         for (Entity alien : mightAct) {
             if (FXGLMath.randomBoolean(ALIEN_ACTION_CHANCE / mightAct.size())) {
-                alien.getComponent(BlasterComponent.class).blast(); //Ici on veut "execute strategie numero alien.action"
+                alien.getComponent(BlasterComponent.class).blastAlien(alien.getComponent(AlienComponent.class)); //Ici on veut "execute strategie numero alien.action"
             }
         }
     }
