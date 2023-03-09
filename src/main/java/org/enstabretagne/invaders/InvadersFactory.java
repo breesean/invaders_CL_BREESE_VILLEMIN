@@ -36,14 +36,8 @@ public class InvadersFactory implements EntityFactory {
     @Spawns("Player")
     public Entity newPlayer(SpawnData data) {
         Texture texture;
-
+        Directions facing = Directions.DOWN;
         // Couldn't find way of rotating texture, so we use a different one - not enough time to search more
-        if (!data.hasKey("facing")) {
-            throw new IllegalArgumentException("Key facing not found in SpawnData!");
-        }
-
-        Directions facing = data.get("facing");
-
         if (facing == Directions.UP) {
             texture = FXGL.texture("cannon_up.png");
         } else if (facing == Directions.DOWN) {
@@ -78,7 +72,7 @@ public class InvadersFactory implements EntityFactory {
     }
 
     /**
-     * Enemy entity, displayed as a aliens.
+     * Enemy entity, displayed as aliens.
      * @param data
      *          The data used to create the entity: X, Y, orientation, parent block.
      * @return the created entity

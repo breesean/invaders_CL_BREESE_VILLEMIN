@@ -33,11 +33,10 @@ import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static javafx.scene.input.KeyCode.*;
+import static org.enstabretagne.invaders.Constants.*;
 
 /**
- *  TODO: graceful exit (via API)
- *
- * @author Almas Baimagambetov (almaslvl@gmail.com)
+ * inspired from Almas Baimagambetov's tutorial
  */
 public class NetworkTestApp extends GameApplication {
 
@@ -59,8 +58,6 @@ public class NetworkTestApp extends GameApplication {
 
     @Override
     protected void initInput() {
-        onKey(W, () -> player1.translateY(-5));
-        onKey(S, () -> player1.translateY(5));
         onKey(A, () -> player1.translateX(-5));
         onKey(D, () -> player1.translateX(5));
         onBtnDown(MouseButton.PRIMARY, () -> shoot(player1));
@@ -73,10 +70,6 @@ public class NetworkTestApp extends GameApplication {
 
         clientInput = new Input();
 
-        onKeyBuilder(clientInput, W)
-                .onAction(() -> player2.translateY(-5));
-        onKeyBuilder(clientInput, S)
-                .onAction(() -> player2.translateY(5));
         onKeyBuilder(clientInput, A)
                 .onAction(() -> player2.translateX(-5));
         onKeyBuilder(clientInput, D)
@@ -133,10 +126,10 @@ public class NetworkTestApp extends GameApplication {
                         connection = conn;
 
                         getExecutor().startAsyncFX(() -> {
-                            player1 = spawn("player1", 150, 150);
+                            player1 = spawn("player1", (double) 400, 560);
                             getMPService().spawn(connection, player1, "player1");
 
-                            player2 = spawn("player2", 150, 250);
+                            player2 = spawn("player2", (double) 400, 0);
                             getMPService().spawn(connection, player2, "player2");
 
                             getMPService().addInputReplicationReceiver(conn, clientInput);
@@ -173,9 +166,11 @@ public class NetworkTestApp extends GameApplication {
                     client.connectAsync();
 
                     getInput().setProcessInput(false);
-                }
 
+
+                }
                 doInit();
+
             });
 
         }, Duration.seconds(0.5));
@@ -188,12 +183,17 @@ public class NetworkTestApp extends GameApplication {
     private void doInit() {
         run(() -> {
             if (isServer && connection != null) {
-                var point = FXGLMath.randomPoint(new Rectangle2D(600, 0, 100, 500));
+                var point = FXGLMath.randomPoint(new Rectangle2D(250, 300, 250, 300));
 
-                var e = spawn("enemy", point);
+                var e = spawn("enemy1", point);
 
-                getMPService().spawn(connection, e, "enemy");
+                getMPService().spawn(connection, e, "enemy1");
+
+                var e2 = spawn("enemy2", point);
+
+                getMPService().spawn(connection, e2, "enemy2");
             }
+
         }, Duration.seconds(1));
     }
 
@@ -218,9 +218,16 @@ public class NetworkTestApp extends GameApplication {
     }
 
     private void shoot(Entity entity) {
-        var bullet = spawn("bullet", entity.getPosition());
+        if (entity == player1) {
+            var bullet1 = spawn("bullet1", entity.getPosition());
 
-        getMPService().spawn(connection, bullet, "bullet");
+            getMPService().spawn(connection, bullet1, "bullet1");
+        } else if (entity == player2) {
+            var bullet2 = spawn("bullet2", entity.getPosition());
+
+            getMPService().spawn(connection, bullet2, "bullet2");
+
+        }
     }
 
     private enum EntityType {
@@ -245,25 +252,60 @@ public class NetworkTestApp extends GameApplication {
                     .build();
         }
 
-        @Spawns("bullet")
-        public Entity newBullet(SpawnData data) {
+        @Spawns("bullet1")
+        public Entity newBullet1(SpawnData data) {
             return entityBuilder(data)
                     .type(EntityType.BULLET)
                     .viewWithBBox(new Rectangle(10, 2, Color.BROWN))
                     .collidable()
                     .with(new OffscreenCleanComponent())
-                    .with(new ProjectileComponent(new Point2D(1, 0), 500))
+                    .with(new ProjectileComponent(new Point2D(0, -1), 500))
                     .with(new NetworkComponent())
                     .build();
         }
 
-        @Spawns("enemy")
-        public Entity newEnemy(SpawnData data) {
+        @Spawns("bullet2")
+        public Entity newBullet2(SpawnData data) {
+            return entityBuilder(data)
+                    .type(EntityType.BULLET)
+                    .viewWithBBox(new Rectangle(10, 2, Color.BROWN))
+                    .collidable()
+                    .with(new OffscreenCleanComponent())
+                    .with(new ProjectileComponent(new Point2D(0, 1), 500))
+                    .with(new NetworkComponent())
+                    .build();
+        }
+
+        @Spawns("enemy1")
+        public Entity newEnemy1(SpawnData data) {
             return entityBuilder(data)
                     .type(EntityType.ENEMY)
                     .viewWithBBox(new Rectangle(20, 20, Color.RED))
                     .collidable()
-                    .with(new ProjectileComponent(new Point2D(-1, 0), 10))
+                    .with(new ProjectileComponent(new Point2D(0, -1), 10))
+                    .with(new NetworkComponent())
+                    .onNotActive(e -> {
+                        var particles = entityBuilder()
+                                .at(e.getCenter())
+                                .buildAndAttach();
+
+                        var emitter = ParticleEmitters.newExplosionEmitter(150);
+
+                        var comp = new ParticleComponent(emitter);
+                        comp.setOnFinished(() -> particles.removeFromWorld());
+
+                        particles.addComponent(comp);
+                    })
+                    .build();
+        }
+
+        @Spawns("enemy2")
+        public Entity newEnemy2(SpawnData data) {
+            return entityBuilder(data)
+                    .type(EntityType.ENEMY)
+                    .viewWithBBox(new Rectangle(20, 20, Color.RED))
+                    .collidable()
+                    .with(new ProjectileComponent(new Point2D(0, 1), 10))
                     .with(new NetworkComponent())
                     .onNotActive(e -> {
                         var particles = entityBuilder()

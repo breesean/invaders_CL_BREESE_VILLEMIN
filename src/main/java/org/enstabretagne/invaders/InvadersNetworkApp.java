@@ -145,7 +145,7 @@ public class InvadersNetworkApp extends GameApplication {
 
         runOnce(() -> {
 
-            getDialogService().showConfirmationBox("Is Server?", answer -> {
+            getDialogService().showConfirmationBox("Êtes vous le serveur ?", answer -> {
                 isServer = answer;
 
                 if (isServer) {

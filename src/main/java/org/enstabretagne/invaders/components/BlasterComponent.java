@@ -1,10 +1,15 @@
 package org.enstabretagne.invaders.components;
 
+import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
+import com.almasb.fxgl.net.Connection;
+import com.almasb.fxgl.multiplayer.MultiplayerService;
+import org.enstabretagne.invaders.InvadersNetworkAppV2;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static org.enstabretagne.invaders.Constants.*;
+
 
 /**
  * The component for entities who can shoot.
@@ -12,7 +17,6 @@ import static org.enstabretagne.invaders.Constants.*;
  * @author Henri Lardy
  */
 public class BlasterComponent extends Component {
-
     /**
      * A cooldown is applied between shots, or the entity would shoot 60 times per second.
      */
@@ -60,6 +64,7 @@ public class BlasterComponent extends Component {
             throw new RuntimeException("Invalid facing direction");
         }
         this.facing = orientation;
+
     }
 
     /**

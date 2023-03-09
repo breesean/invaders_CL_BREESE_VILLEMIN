@@ -41,11 +41,7 @@ import static javafx.scene.input.KeyCode.*;
 import static org.enstabretagne.invaders.Constants.*;
 import static org.enstabretagne.invaders.Constants.SPRITE_SIZE;
 
-/**
-*  TODO: graceful exit (via API)
-*
-* @author Almas Baimagambetov (almaslvl@gmail.com)
-*/
+
 public class InvadersNetworkAppV2 extends GameApplication {
 
     private final Logger log = Logger.get(GameApplication.class);
@@ -108,7 +104,7 @@ public class InvadersNetworkAppV2 extends GameApplication {
 
         runOnce(() -> {
 
-            getDialogService().showConfirmationBox("Is Server?", answer -> {
+            getDialogService().showConfirmationBox("Êtes vous le serveur ?", answer -> {
                 isServer = answer;
 
                 if (isServer) {
@@ -122,22 +118,21 @@ public class InvadersNetworkAppV2 extends GameApplication {
 
                         getExecutor().startAsyncFX(() -> {
                             SpawnData dataBottom = new SpawnData(
-                                    (double) (APP_WIDTH - SPRITE_SIZE) / 2,
-                                    APP_HEIGHT - SPRITE_SIZE);
-                            dataBottom.put("facing", Directions.UP);
+                                    100,
+                                    100);
+
                             Entity playerBottom = spawn("Player", dataBottom);
                             moveComponentBottom = playerBottom.getComponent(MoveComponent.class);
                             blasterComponentBottom = playerBottom.getComponent(BlasterComponent.class);
-                            getMPService().spawn(connection, playerBottom,"Player");
+                            getMPService().spawn(conn, playerBottom,"Player");
 
                             SpawnData dataTop = new SpawnData(
-                                    (double) (APP_WIDTH - SPRITE_SIZE) / 2,
+                                    0,
                                     0);
-                            dataTop.put("facing", Directions.UP);
                             Entity playerTop = spawn("Player", dataTop);
                             moveComponentTop = playerTop.getComponent(MoveComponent.class);
                             blasterComponentTop = playerTop.getComponent(BlasterComponent.class);
-                            getMPService().spawn(connection, playerTop, "Player");
+                            getMPService().spawn(conn, playerTop, "Player");
 
                             getMPService().addInputReplicationReceiver(conn, clientInput);
                             getMPService().addPropertyReplicationSender(conn, getWorldProperties());
