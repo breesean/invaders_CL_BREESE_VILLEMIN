@@ -9,8 +9,15 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 import static org.enstabretagne.invaders.Constants.BLAST_COOLDOWN;
 import static org.enstabretagne.invaders.Constants.SPRITE_SIZE;
 
+/**
+ * Stratégie de tir avec deux tirs simultanés
+ */
 public class ComportementTirDouble implements IComportement {
-
+    /**
+     * Méthode permettant à l'alien de faire deux tirs simultanés mais à des vitesses différentes,
+     * ce qui les rend plus dur à esquiver
+     * @param BL blaster de l'alien considéré
+     */
     @Override
     public void execute(BlasterComponent BL) {
         BL.sprite= "Blue_small.png";

@@ -15,7 +15,9 @@ public class AlienComponent extends AnimationComponent {
     private final AlienBlock block;
     private final int id;
     private final Directions facing;
-
+    /**
+     * Comportement correspond à la strategie de tir liée à l'alien
+     */
     public final IComportement comportement;
 
     /**
@@ -25,6 +27,8 @@ public class AlienComponent extends AnimationComponent {
      *          The block the alien is a part of.
      * @param orientation
      *          The direction the alien is facing.
+     * @param comportement
+     *          The behavior strategy associated with the alien
      */
     public AlienComponent(int id, AlienBlock block, Directions orientation,IComportement comportement) {
         super("invader.png", 2, 64, 64, Duration.seconds(1), 0, 1);

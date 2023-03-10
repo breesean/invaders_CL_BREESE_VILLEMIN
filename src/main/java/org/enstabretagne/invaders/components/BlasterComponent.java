@@ -63,6 +63,11 @@ public class BlasterComponent extends Component {
         }
         this.facing = orientation;
     }
+
+    /**
+     * Genere un tir provenant d'un joueur, le pattern stratégie a été appliqué aux aliens mais on pourrait imaginer une
+     * implémentation permettant de modifier le type de tir pour les joueurs
+     */
     public void blast() {
         if (getGameTimer().getNow() - this.lastShot >= BLAST_COOLDOWN) {
             SpawnData data;
@@ -86,7 +91,7 @@ public class BlasterComponent extends Component {
     }
 
     /**
-     * Shoots a blast (generates an entity) is the cooldown is over.
+     * Shoots a blast from an alien (generates an entity) if the cooldown is over.
      */
     public void blastAlien(AlienComponent AC) {
         AC.comportement.execute(this);

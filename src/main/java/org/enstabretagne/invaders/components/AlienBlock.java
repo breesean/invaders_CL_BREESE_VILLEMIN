@@ -316,10 +316,6 @@ public class AlienBlock {
         }
     }
 
-    public void action()  {
-
-    }
-
     /**
      * Find aliens who can shoot. Then randomly make them shoot.
      * Only aliens in an extreme line (if facing DOWN, then only the bottom aliens can shoot).

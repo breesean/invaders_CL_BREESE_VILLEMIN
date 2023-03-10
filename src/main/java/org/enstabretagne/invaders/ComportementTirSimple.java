@@ -8,7 +8,14 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameWorld;
 import static org.enstabretagne.invaders.Constants.SPRITE_SIZE;
 
+/**
+ * Stratégie de tir simple, comme implémentée auparavant
+ */
 public class ComportementTirSimple implements IComportement {
+    /**
+     * Méthode de tir classique, l'alien tire si sa période de cooldown est écoulée
+     * @param BL blaster de l'alien considéré
+     */
     @Override
     public void execute(BlasterComponent BL) {
         if (getGameTimer().getNow() - BL.lastShot >= BLAST_COOLDOWN) {

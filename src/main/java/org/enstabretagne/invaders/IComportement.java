@@ -7,5 +7,9 @@ import org.enstabretagne.invaders.components.BlasterComponent;
  *
  */
 public interface IComportement {
+    /**
+     * méthode de tir vide, puisque l'alien ne tire pas
+     * @param BL blaster de l'alien considéré
+     */
     public void execute(BlasterComponent BL);
 }
